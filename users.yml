@@ -27,7 +27,7 @@
         password: "{{ database_password | password_hash('sha512') }}"
         state: present
       loop: "{{ users }}"
-      when: item.uid is match("^2") and inventory_hostname groups['database']
+      when: item.uid is match("^2") and inventory_hostname in groups['database']
 
     - name: upload ssh key to users
       ansible.posix.authorized_key:
