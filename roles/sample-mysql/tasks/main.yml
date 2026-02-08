@@ -1,0 +1,38 @@
+---
+- name: Create new partition on /dev/sdb
+  community.general.parted:
+    device: /dev/sdc
+    number: 1
+    state: present
+    part_end: 800MiB
+
+- name: Create volume group using /dev/sdb
+  community.general.lvg:
+    vg: vg_database
+    pvs: /dev/sdc1
+
+- name: Create logical volume
+  community.general.lvol:
+    vg: vg_database
+    lv: lv_mysql
+    size: 512m
+
+- name: Create XFS filesystem on lv_mysql logical volume
+  community.general.filesystem:
+    fstype: xfs
+    dev: /dev/mapper/vg_database-lv_mysql
+
+- name: Create mount point
+  ansible.builtin.file:
+    path: /mnt/mysql_backups
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Mount filesystem permanently
+  ansible.posix.mount:
+    path: /mnt/mysql_backups
+    src: /dev/mapper/vg_database-lv_mysql
+    fstype: xfs
+    state: mounted
