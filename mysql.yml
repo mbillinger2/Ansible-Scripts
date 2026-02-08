@@ -1,0 +1,6 @@
+---
+- name: Logical Volume Management
+  hosts: database
+  become: true
+  roles:
+    - sample-mysql
