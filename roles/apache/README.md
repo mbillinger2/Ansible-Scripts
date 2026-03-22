@@ -1,7 +1,10 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This role installs, starts and enables the httpd package.
+Enables port 80 (http) access.
+Creates a j2 template.
+Creates a handler that restarts the httpd service.
 
 Requirements
 ------------
