@@ -1,0 +1,24 @@
+---
+- name: Ensure httpd package is installed.
+  ansible.builtin.dnf:
+    name: httpd
+    state: present
+
+- name: Ensure httpd service is started and enabled.
+  ansible.builtin.service:
+    name: httpd
+    state: started
+    enabled: true
+
+- name: Ensure firewall is enabled and allows access to HTTP.
+  ansible.posix.firewalld:
+    port: 80/tcp
+    permanent: true
+    state: enabled
+    immediate: true
+
+- name: Use template file to create index.html
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+  notify: restart httpd
