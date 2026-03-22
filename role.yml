@@ -1,0 +1,10 @@
+---
+- name: Use the Apache Role
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Including Apache Role
+      ansible.builtin.include_role:
+        name: apache
+      when: inventory_hostname in groups['webservers']
